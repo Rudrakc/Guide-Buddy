@@ -1,0 +1,26 @@
+{
+  "name": "guide_buddy",
+  "version": "1.0.0",
+  "main": "app.ts",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc && node dist/app.js",
+    "dev": "nodemon src/app.ts"
+  },
+  "author": "rudra_chauhan",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@types/html-to-text": "^9.0.4",
+    "express": "^4.21.1",
+    "html-to-text": "^9.0.5",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  }
+}

@@ -1,27 +1,21 @@
 import express from "express";
-import { fetchContent } from "./utils/fetchContent.js";
-import * as fs from "fs";
+import Env from "./env.js";
+import cors from "cors";
+import bodyParser from "body-parser";
+import authRouter from "./Routes/authRoute.js"
+import quizRouter from "./Routes/quizRoute.js"
 
 const app = express();
-const port = 8800;
+const port = Env.PORT;
 
-export const parseArticle = async () => {
-  const url =
-    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise";
+// Middleware
+app.use(cors());
+app.use(bodyParser.json());
 
-  try {
-    // Fetch and segment the article content
-    const content = await fetchContent(url);
+// Routes
+app.use("/api/auth", authRouter);
+app.use("/api/quiz", quizRouter);
 
-    fs.writeFile("file.txt", content, function (err) {
-      if (err) throw err;
-      console.log("File is created successfully.");
-    });
-  } catch (error) {
-    console.error("Error parsing the content:", error);
-  }
-};
-parseArticle();
 
 app.get("/", (req, res) => {
   res.send("Hello, TypeScript Node Express!");

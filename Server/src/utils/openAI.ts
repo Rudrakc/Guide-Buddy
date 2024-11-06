@@ -87,3 +87,43 @@ export const generateQuiz = async (content: string) => {
     throw error;
   }
 };
+
+export interface UserAnswer {
+  question: string;
+  answerMarked: string;
+  correctAnswer: string;
+}
+
+export const generateFeedback = async (userAnswers : UserAnswer[]) => {
+  try 
+  {
+    const formattedUserAnswers = JSON.stringify(userAnswers, null, 2);
+    const prompt = `
+      I give an array of obj containing question, correct answer, ans marked by user.
+      You have to provide feedback for the user and giving him further topics to read or topics which he has to revise.
+      Keep it to the point and consise no need to explain every ans.
+      The answers marked by the users:
+      ${formattedUserAnswers}
+    `;
+
+    // Send request to OpenAI API
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are an assistant that provides feedback on quiz responses.",
+        },
+        { role: "user", content: prompt },
+      ],
+    });
+
+    const feedback = response.choices[0].message?.content;
+
+    return feedback;
+  } catch (error) {
+    console.error("Error generating feedback:", error);
+    throw error;
+  }
+};

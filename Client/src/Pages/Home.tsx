@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { QuizAttempt } from "../types/type";
+import { QuizAttempt, QuizData } from "../types/type";
 import QuizHistoryTable from "../Components/QuizHistoryTable";
+import axios from "axios";
 
-const Home = () => {
+interface HomeProps {
+  setQuizData: React.Dispatch<React.SetStateAction<QuizData | null>>;
+}
+
+const Home: React.FC<HomeProps> = ({ setQuizData }) => {
   const [url, setUrl] = useState("");
   const [quizAttempts, setQuizAttempts] = useState<QuizAttempt[]>([
     {
@@ -27,8 +32,21 @@ const Home = () => {
   ]);
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const getQuizData = async () => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/quiz/getQuiz`,
+        { url: url }
+      );
+      localStorage.setItem("quizData", JSON.stringify(response.data));
+      setQuizData(response.data);
+    } catch (error) {
+      console.error("Error While getting Quiz Data");
+    }
+  };
+
+  const handleSubmit = async () => {
+    await getQuizData();
     navigate("/quiz");
   };
 

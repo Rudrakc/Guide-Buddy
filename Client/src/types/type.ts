@@ -19,3 +19,9 @@ export interface QuizAttempt {
   attemptDate: string;
   status: "Done" | "In Progress";
 }
+
+export interface UserAnswer {
+  question: string;
+  answerMarked: string;
+  correctAnswer: string;
+}

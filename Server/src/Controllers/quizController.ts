@@ -1,6 +1,6 @@
 import express, { json, Request, Response } from "express";
 import { fetchContent } from "../utils/fetchContent.js";
-import { generateQuiz } from "../utils/openAI.js";
+import { generateFeedback, generateQuiz } from "../utils/openAI.js";
 
 export const getQuiz = async (req: Request, res: Response) => {
   try {
@@ -21,5 +21,14 @@ export const getQuiz = async (req: Request, res: Response) => {
 };
 
 export const getFeedback = async (req: Request, res: Response) => {
-    res.send("Hii get Feedback");
+  try {
+    const { userAns } = req.body;
+    const feedback = await generateFeedback(userAns);
+
+    res.status(201).json(feedback);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Internal Server Error in geneterating FeedBack" });
+  }
 };
